@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+    display: flex;
+    flex-direction: column;  /* Vertical stacking */
+    min-height: 93vh;  /* Full screen height */
+    justify-content: space-between;  /* Distribute space between elements */
+}
+
+#sensor-chart {
+    max-height: 60vh;  /* Adjust based on how much of the screen you want the chart to occupy */
+}
+
+.sensor-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2vh; /* Adjust space using viewport units */
+    max-width: 480px; 
+    margin: 2vh auto; 
+    flex: 1;  /* This ensures that the button group will stretch to fill available space */
+}
+
+/* Rest of the button styles remain unchanged */
+
+
+button {
+    flex: 1 0 45%; /* Take roughly half the width of the container, adjust for gap */
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 15px; /* Rounded corners */
+    border: none;
+    background-color: #FFA500; /* Orange background */
+    color: white; /* Text color */
+    cursor: pointer; /* Hand cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+button:hover {
+    background-color: #FF4500; /* Darker orange for hover */
+}
+
+    </style>
+</head>
+
+<body onload="displayChart()">
+
+    <canvas id="sensor-chart" width="400" height="400"></canvas>
+
+    <div class="sensor-buttons">
+        <button onclick="updateChart('Sensor 1')">Carbon Dioxide</button>
+        <button onclick="updateChart('Sensor 2')">PM10</button>
+        <button onclick="updateChart('Sensor 3')">PM2.5</button>
+        <button onclick="updateChart('Sensor 4')">Humidity</button>
+        <button onclick="updateChart('Sensor 5')">Temperature</button>
+    </div>
+
+    <script>
+        let currentChart;
+
+        function displayChart() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sensorName = urlParams.get('sensor') || 'Sensor 1';
+            updateChart(sensorName);
+        }
+
+        function updateChart(sensorName) {
+            if (currentChart) {
+                currentChart.destroy(); // Destroy the previous chart instance
+            }
+
+            const ctx = document.getElementById('sensor-chart').getContext('2d');
+
+            const data = {
+                labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                datasets: [{
+                    label: 'Sensor Data for ' + sensorName,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    data: generateDummyData(sensorName), // Example data based on sensor name
+                    borderWidth: 1
+                }]
+            };
+
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateDummyData(sensorName) {
+            // Customize dummy data based on the sensor name
+            switch (sensorName) {
+                case 'Sensor 1':
+                    return [1799, 1152, 2000, 1478, 1876,1564,1354];
+                case 'Sensor 2':
+                    return [5, 15, 10, 5, 25, 35, 50];
+                case 'Sensor 3':
+                    return [10, 20, 15, 8, 30, 40, 34];
+                case 'Sensor 4':
+                    return [65, 58, 56, 75, 72, 55, 60];
+                case 'Sensor 5':
+                    return [27, 29, 25, 28, 26, 25, 29];
+                default:
+                    return [0, 0, 0, 0, 0, 0, 0];
+            }
+        }
+    </script>
+</body>
+
+</html>

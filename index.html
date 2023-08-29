@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pawamann Sensors</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="https://www.iiserb.ac.in/assets/logo/images/75x75.jpg">
+<script src="script.js" defer></script>
+</head>
+
+<body>
+    <div id="preloader">
+        <img src="https://www.iiserb.ac.in/assets/logo/images/204x204.jpg" alt="Placeholder Image from Unsplash" />
+    </div>  
+    
+    <div style="height: 100vh;">
+    <header>
+        <h1>Pawamann</h1>
+    </header>
+
+    <div class="sensor-grid">
+        <div class="sensor-block" onclick="redirectToChart('Sensor 1')">
+            <h3>Carbon Dioxide</h3>
+            <p class="sensor-value">CO2 -- </p>
+        </div>
+        <div class="sensor-block" onclick="redirectToChart('Sensor 2')">
+            <h3>Particulate matter 10</h3>
+            <p class="sensor-value">PM10: --</p>
+        </div>
+        <div class="sensor-block" onclick="redirectToChart('Sensor 3')">
+            <h3>Particulate matter 2.5</h3>
+            <p class="sensor-value">PM2.5: --</p>
+        </div>
+        <div class="sensor-block" onclick="redirectToChart('Sensor 4')">
+            <h3>Humidity</h3>
+            <p class="sensor-value">Value: --</p>
+        </div>
+        <div class="sensor-block" onclick="redirectToChart('Sensor 5')">
+            <h3>Temerature</h3>
+            <p class="sensor-value">Value: --</p>
+        </div>
+       
+                                                        
+    </div>
+    <a href="http://192.168.4.1" class="connect-button">Connect with Local IP</a>
+</div>
+<script type="module">
+   // const customHeadings = ["CO2:", "PM10:", "PM2.5:", "Value:", "Value:"];
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+      import { getDatabase, ref, get, child,orderByKey, limitToLast} from "https://www.gstatic.com/firebasejs/10.3.0/firebase-database.js";
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+  apiKey: "AIzaSyBn1Xvv_cN1GigsqT8hsIEfU_Fe5LALsss",
+  authDomain: "dummy-9a1da.firebaseapp.com",
+  databaseURL: "https://dummy-9a1da-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "dummy-9a1da",
+  storageBucket: "dummy-9a1da.appspot.com",
+  messagingSenderId: "843183218644",
+  appId: "1:843183218644:web:c616d29f004d0c72844041",
+  measurementId: "G-XRHJ1YZBEE"
+};
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      const lastUpdatedValueSpan = document.getElementById('lastUpdatedValue');
+    // Fetch and display the last updated value from Firebase
+// Fetch and display the last updated value from Firebase
+// Fetch and display the last updated values from Firebase in the sensor blocks
+// Fetch and display the last updated values from Firebase in the sensor blocks
+const customHeadings = ["", "", "", "", ""];
+//const customHeadings = ["Custom Heading 1:", "Custom Heading 2:", "Custom Heading 3:", "Custom Heading 4:", "Custom Heading 5:"];
+const units = [" ppm", " ug/m3", " ug/m3", " %Rh", " 'C"]; // Replace with your actual units
+
+// Fetch and display the last updated values from Firebase in the sensor blocks
+window.addEventListener('load', async function() {
+    try {
+        const response = await fetch(`${firebaseConfig.databaseURL}/Aggregate_Values.json?orderBy="$key"&limitToLast=1`);
+        const data = await response.json();
+
+        if (data) {
+            const lastEntryKey = Object.keys(data)[0];
+            const lastUpdatedValue = data[lastEntryKey];
+
+            // Split the value using "@" as a separator
+            const values = lastUpdatedValue.split("@");
+
+            if (values.length >= 5) {
+                // Display each value in the corresponding sensor block with custom heading and unit
+                for (let i = 0; i < 5; i++) {
+                    const sensorBlock = document.getElementsByClassName('sensor-value')[i];
+                    if (sensorBlock) {
+                        sensorBlock.textContent = `${customHeadings[i]} ${values[i]}${units[i]}`;
+                    }
+                }
+            }
+        } else {
+            console.log("No data available");
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+});
+
+
+
+</script>
+</body>
+
+</html>
