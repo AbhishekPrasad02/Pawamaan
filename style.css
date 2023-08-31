@@ -27,34 +27,21 @@ body {
     bottom: 20px;
     right: 20px;
     margin-left: 20px; /* Add spacing between button and right edge */
-    background-color:#800080;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 20px 20px; /* Round right edge and left edge */
-    text-decoration: none;
-    cursor: pointer;
     background-color: rgba(255, 255, 255, 0.2); /* Set the background color with opacity */
     padding: 15px;
     border-radius: 20px;
     backdrop-filter: blur(10px); /* Apply a blur effect to create glass-like appearance */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     text-align: center;
-}
-#addToHomeScreen {
-    /* Your existing connect-button styles */
-    position: fixed;
-    bottom: 40px;
-    right: 20px;
-    margin-left: 20px; /* Add spacing between button and right edge */
-    background-color: #4A00E0;
+    
     color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 20px 0 0 20px; /* Round right edge and left edge */
+    border-radius: 20px 0 20px 0; /* Round right edge and left edge */
     text-decoration: none;
     cursor: pointer;
 }
+
 
 
 header {
