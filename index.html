@@ -47,6 +47,7 @@
        
                                                         
     </div>
+    <button id="addToHomeScreen">Add to Home Screen</button>
     <a href="http://192.168.4.1" class="connect-button">Connect with Local IP</a>
 </div>
 <script type="module">
@@ -107,6 +108,14 @@ window.addEventListener('load', async function() {
         console.error("Error fetching data:", error);
     }
 });
+document.getElementById('addToHomeScreen').addEventListener('click', () => {
+            if ('addToHomeScreen' in window.navigator) {
+                // Use the browser's native add to home screen functionality
+                window.navigator.addToHomeScreen();
+            } else {
+                alert("Your browser doesn't support this feature.");
+            }
+        });
 
 
 
