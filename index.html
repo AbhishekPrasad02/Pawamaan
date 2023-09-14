@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="style.css">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="https://www.iiserb.ac.in/assets/logo/images/75x75.jpg">
 <script src="script.js" defer></script>
@@ -18,11 +20,41 @@
         <img src="https://www.iiserb.ac.in/assets/logo/images/204x204.jpg" alt="Placeholder Image from Unsplash" />
     </div>  
     
-    <div style="height: 100vh;">
+    <div>
     <header>
         <h1>Pawamann</h1>
     </header>
+    <div class="aqi-box" id="mainBox">
+        <button id="locationBtn">Get Location and Data</button>
 
+
+        <div class="aqi-circle" id="aqiCircle" style="display:none;">
+            <div class="aqi-content">
+                <div class="aqi-heading">AQI</div>
+                <div class="aqi-value" id="aqiValue">75</div>
+                <div class="aqi-quality">Good</div>
+            </div>
+        </div>
+
+        <div class="aqi-details" id="aqiDetails" style="display:none;">
+            <div>
+                <span class="env-heading"><i class="fas fa-temperature-high"></i></span>
+                <span id="temperatureValue">25°C</span>
+            </div>
+            <div>
+                <span class="env-heading"><i class="fas fa-tint"></i></span>
+                <span id="humidityValue">60%</span>
+            </div>
+            <div>
+                <span class="env-heading">PM10</span>
+                <span id="pm10Value">45 μg/m³</span>
+            </div>
+            <div>
+                <span class="env-heading">PM2.5</span>
+                <span id="pm25Value">25 μg/m³</span>
+            </div>
+        </div>
+    </div>
     <div class="sensor-grid">
         <div class="sensor-block" onclick="redirectToChart('Sensor 1')">
             <h3>Carbon Dioxide</h3>
@@ -54,6 +86,7 @@
    // const customHeadings = ["CO2:", "PM10:", "PM2.5:", "Value:", "Value:"];
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
       import { getDatabase, ref, get, child,orderByKey, limitToLast} from "https://www.gstatic.com/firebasejs/10.3.0/firebase-database.js";
+      const connectButton = document.querySelector('.connect-button');
 
       // Your web app's Firebase configuration
       // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -109,6 +142,92 @@ window.addEventListener('load', async function() {
     }
 });
 
+connectButton.addEventListener('click', function() {
+            // Check if the device is connected to the specific Wi-Fi network
+            const isConnectedToWiFi = checkWiFiConnection();
+
+            if (!isConnectedToWiFi) {
+                alert("Connect to Wi-Fi network 'xyz' before accessing the local IP.");
+            } else {
+                // Redirect to the local IP address
+                window.location.href = "http://192.168.4.1";
+            }
+        });
+
+        // Function to check if the device is connected to a specific Wi-Fi network
+        function checkWiFiConnection() {
+            // Replace 'xyz' with the actual Wi-Fi network name
+            const wifiNetworkName = 'xyz';
+
+            // Get the current Wi-Fi network name from the browser
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            const wifiName = connection && connection.effectiveType;
+
+            return wifiName === wifiNetworkName;
+        }
+        document.getElementById('locationBtn').addEventListener('click', getData);
+
+        function getData() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(fetchData);
+            } else {
+                document.getElementById("dataOutput").innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        async function fetchData(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            // Fetch Weather Data
+            const weatherOptions = {
+                method: 'GET',
+                url: 'https://weather-by-api-ninjas.p.rapidapi.com/v1/weather',
+                params: { lat: lat, lon: lon },
+                headers: {
+                    'X-RapidAPI-Key': 'c3c27280b6msh0be71ed2aaf1f44p1541a2jsnea7fa3b5fc57',
+                    'X-RapidAPI-Host': 'weather-by-api-ninjas.p.rapidapi.com'
+                }
+            };
+
+            // Fetch Air Quality Data
+            const airQualityOptions = {
+                method: 'GET',
+                url: 'https://air-quality-by-api-ninjas.p.rapidapi.com/v1/airquality',
+                params: { lat: lat, lon: lon },
+                headers: {
+                    'X-RapidAPI-Key': 'c3c27280b6msh0be71ed2aaf1f44p1541a2jsnea7fa3b5fc57',
+                    'X-RapidAPI-Host': 'air-quality-by-api-ninjas.p.rapidapi.com'
+                }
+            };
+
+            try {
+                const weatherResponse = await axios.request(weatherOptions);
+                const airQualityResponse = await axios.request(airQualityOptions);
+
+                // Extract data
+                const overallAqi = airQualityResponse.data.overall_aqi;
+                const temperature = weatherResponse.data.temp;
+                const humidityValue = weatherResponse.data.humidity;
+                const pm25 = airQualityResponse.data["PM2.5"].concentration;
+                const pm10 = airQualityResponse.data["PM10"].concentration;
+
+                // Populate the UI with the extracted data
+                document.getElementById("aqiValue").textContent = overallAqi;
+                document.getElementById("temperatureValue").textContent = `${temperature}°C`;
+                document.getElementById("humidityValue").textContent = `${humidityValue}%`;
+                document.getElementById("pm10Value").textContent = `${pm10} μg/m³`;
+                document.getElementById("pm25Value").textContent = `${pm25} μg/m³`;
+
+                // Hide the location button and show AQI details
+                document.getElementById("locationBtn").style.display = "none";
+                document.getElementById("aqiCircle").style.display = "block";
+                document.getElementById("aqiDetails").style.display = "flex";
+            } catch (error) {
+                document.getElementById("dataOutput").innerHTML = "Error fetching data.";
+                console.error(error);
+            }
+        }
 
 
 </script>
