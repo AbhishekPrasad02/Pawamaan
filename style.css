@@ -85,3 +85,118 @@ header {
         grid-template-columns: 1fr 1fr;  /* Adjust as needed for mobile responsiveness */
     }
 }
+
+
+.aqi-box {
+    width: 80%;
+    max-width: 300px; /* Increased from the previous 200px */
+    padding: 30px; /* Increased padding */
+    background-color:rgba(255, 255, 255, 0.2);/* Silver gradient */
+   /* Slight border for definition */
+   margin-left: 1vw;
+    border-radius: 15px; /* Larger border-radius for smoother corners */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ffffff;
+}
+
+
+.aqi-circle {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: 8px solid rgb(29, 196, 29); 
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.aqi-content {
+    text-align: center;
+}
+
+.aqi-heading {
+    font-size: 0.7em;
+    font-weight: bold;
+}
+
+.aqi-value {
+    font-size: 1.8em;
+    margin: 5px 0;
+}
+
+.aqi-quality {
+    font-size: 0.7em;
+}
+
+.aqi-details {
+    display: flex;
+    width: 100%;
+    justify-content: space-between; /* This evenly spaces the elements in a row */
+    align-items: center;
+    padding: 10px; /* Add some padding for spacing */
+}
+.aqi-details > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* This centers the children horizontally within the parent div */
+}
+
+.env-heading {
+    margin-bottom: 5px; /* Adjust as needed for space between icon and value */
+}
+
+.aqi-detail {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+#locationBtn {
+    background: linear-gradient(45deg, #8E2DE2, #4A00E0); /* Gradient to match theme */
+    color: #ffffff; /* White text */
+    padding: 12px 24px; /* Slightly larger padding */
+    border-radius: 30px; /* Very rounded corners */
+    border: none; /* No border */
+    font-size: 1.1em; /* Slightly larger font */
+    font-weight: bold; /* Bold text */
+    cursor: pointer; /* Hand cursor on hover */
+    transition: transform 0.2s, box-shadow 0.2s; /* Smooth transform and shadow transition */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Initial shadow */
+    display: inline-block; /* Allows transform to work */
+}
+
+#locationBtn:hover {
+    transform: translateY(-3px); /* Move button up slightly on hover */
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.25); /* More pronounced shadow on hover */
+}
+
+.env-card {
+    background: #ffffff;
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+.env-heading, .env-heading i {
+    display: block;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+.env-heading i, .aqi-details {
+    font-weight: bold;  /* Makes the icon and value bold */
+}
+span{
+    font-weight: lighter;
+}
+.env-heading i {
+    font-weight: bold;
+    opacity: 1; /* Adjust the value to make it more or less transparent */
+}
