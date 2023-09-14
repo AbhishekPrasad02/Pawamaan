@@ -191,6 +191,7 @@ header {
     font-weight: bold;
 }
 .env-heading i, .aqi-details {
+    font-size: 0.9em;
     font-weight: bold;  /* Makes the icon and value bold */
 }
 span{
