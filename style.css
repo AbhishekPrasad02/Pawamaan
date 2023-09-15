@@ -3,8 +3,9 @@ body {
     margin: 0;
     padding: 0;
     /* Gradient background from light orange to a darker shade */
-    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(100,43,115,1) 0%, rgba(4,0,4,1) 90% );
-    background-image: linear-gradient( 60deg, #4A00E0,#8E2DE2);
+    /*background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(100,43,115,1) 0%, rgba(4,0,4,1) 90% );
+    background-image: linear-gradient( 60deg, #4A00E0,#8E2DE2);*/
+    background-image: radial-gradient(circle at 90% 10%,rgb(4, 126, 147) 0%,rgb(19, 19, 19) 90%);
     color: #fff;
 height: 150vh;
 }
